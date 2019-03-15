@@ -60,12 +60,13 @@ function parseArgs(input, comment) {
 		totalSuccessCount: 0,
 		totalSuccessCountNoBonus: 0,
 		faceValueSum: 0,
+		bonusThreshold: 10,
 		output: null
 	};
 	
 	try {
 		
-		if(args.length > 3) {
+		if(args.length > 4) {
 			throw(tooManyArgumentsMessage());
 		}
 		
@@ -89,7 +90,7 @@ function invalidArgumentMessage(argument) {
 		"Maybe you should go back to Candy Crush."
 	];
 	var errorIdx = Math.floor(Math.random() * flavor.length);
-	return flavor[errorIdx] + "\n\n" + "Unknown command: `" + argument + "`" + usage();
+	return flavor[errorIdx] + "\n\n" + "Unknown command: `" + argument + "`\n\n" + usage();
 }
 
 function tooManyArgumentsMessage() {
@@ -97,12 +98,15 @@ function tooManyArgumentsMessage() {
 }
 
 function usage() {
-	return "\n\nUsage: \n"
-	+ "Roll 5 d10:                          \t5d10>=7\n"
-	+ "Add 5 auto successes:     \t5d10>=7 5a\n"
-	+ "Multiply successes by 2: \t5d10>=7 x2\n"
-	+ "Put it all together:             \t5d10>=7 5a x2\n"
-	+ "OR:                                      \t5d10>=7 x2 5a\n";
+	return "`\n\n" 
+	+ "Usage:\n"
+	+ "Roll 5 d10:                 \t/r 5d10>=7 \n"
+	+ "Add 5 auto successes:       \t/r 5d10>=7 5a \n"
+	+ "Multiply successes by 2:    \t/r 5d10>=7 x2 \n"
+	+ "Count 8s, 9s, and 10s twice:\t/r 5d10>=7 b8 \n"
+	+ "Put it all together:        \t/r 5d10>=7 5a x2 \n"
+	+ "OR:                         \t/r 5d10>=7 x2 5a\n"
+	+ "`";
 }
 
 function interpretArgument(argument, rollEvent) {
@@ -123,7 +127,11 @@ function interpretArgument(argument, rollEvent) {
 			break;
 		//multiplier argument
 		case (argument.match(/^[Xx]\d+$/) || {}).input:
-			rollEvent.multiplier = parseInt(argument.match(/(?<=[xX])\d+/));
+			rollEvent.multiplier = parseInt(argument.match(/(?<=[Xx])\d+/));
+			break;
+		//bonus threshold argument
+		case (argument.match(/^[Bb]\d+$/) || {}).input:
+			rollEvent.bonusThreshold = parseInt(argument.match(/(?<=[Bb])\d+/));
 			break;
 		default:
 			throw(invalidArgumentMessage(argument));
@@ -171,7 +179,7 @@ function roll(rollEvent) {
 function calculateTotals(rollEvent) {
 
 	rollEvent.successCount = rollEvent.dice.filter(dice => dice.success == true).length;
-	rollEvent.bonusSuccessCount = rollEvent.dice.filter(dice => dice.faceValue == 10).length;
+	rollEvent.bonusSuccessCount = rollEvent.dice.filter(dice => dice.faceValue >= rollEvent.bonusThreshold).length;
 	rollEvent.totalSuccessCount = (rollEvent.successCount + rollEvent.bonusSuccessCount + rollEvent.autoSuccesses) * rollEvent.multiplier;
 	rollEvent.totalSuccessCountNoBonus = (rollEvent.successCount + rollEvent.autoSuccesses) * rollEvent.multiplier;
 	rollEvent.onesCount = rollEvent.dice.filter(dice => dice.faceValue == 1).length;
