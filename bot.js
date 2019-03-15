@@ -185,7 +185,7 @@ function calculateTotals(rollEvent) {
 	rollEvent.onesCount = rollEvent.dice.filter(dice => dice.faceValue == 1).length;
 	
 	//botch check
-	if (rollEvent.successCount == 0) {
+	if (rollEvent.successCount == 0 && rollEvent.successThreshold > -1) {
 		handleBotch(rollEvent);
 	}
 	
@@ -198,6 +198,12 @@ function calculateTotals(rollEvent) {
 }
 
 function handleBotch(rollEvent) {
+	
+	if(rollEvent.onesCount > 5) {
+		rollEvent.botchMessage = "HOLY FUCKING SHITSHOW BOTCH(" + rollEvent.onesCount + ")";
+		return;
+	}
+	
 	var messageMap = new Map();
 	
 	messageMap.set(1, "BOTCH");
