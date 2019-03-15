@@ -1,0 +1,26 @@
+<service>
+	<id>lessshittyroller.exe</id>
+	<name>LessShittyRoller</name>
+	<description>Roller bot for Exalted Discord</description>
+	<executable>D:\node.exe</executable>
+	<logmode>rotate</logmode>
+	<argument>--harmony</argument>
+	<argument>--max_old_space_size=4096</argument>
+	<argument>C:\Users\Jeff\AppData\Roaming\npm\node_modules\node-windows\lib\wrapper.js</argument>
+	<argument>--file</argument>
+	<argument>D:\Exalted Roller\bot.js</argument>
+	<argument>--log</argument>
+	<argument>LessShittyRoller wrapper</argument>
+	<argument>--grow</argument>
+	<argument>0.25</argument>
+	<argument>--wait</argument>
+	<argument>1</argument>
+	<argument>--maxrestarts</argument>
+	<argument>3</argument>
+	<argument>--abortonerror</argument>
+	<argument>n</argument>
+	<argument>--stopparentfirst</argument>
+	<argument>undefined</argument>
+	<stoptimeout>30sec</stoptimeout>
+	<workingdirectory>D:\Exalted Roller</workingdirectory>
+</service>
