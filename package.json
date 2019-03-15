@@ -6,6 +6,7 @@
   "author": "Jeffrey Meulenberg",
   "dependencies": {
     "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+    "node-windows": "^0.1.14",
     "winston": "^3.2.1"
   }
 }

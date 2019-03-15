@@ -162,7 +162,7 @@ function roll(rollEvent) {
 			dice.success = dice.faceValue >= rollEvent.successThreshold;
 			break;
 		default:
-			//console.log(rollEvent.equalityOperator);
+			console.log(rollEvent.equalityOperator);
 	}
 	
 	return dice;
@@ -174,6 +174,12 @@ function calculateTotals(rollEvent) {
 	rollEvent.bonusSuccessCount = rollEvent.dice.filter(dice => dice.faceValue == 10).length;
 	rollEvent.totalSuccessCount = (rollEvent.successCount + rollEvent.bonusSuccessCount + rollEvent.autoSuccesses) * rollEvent.multiplier;
 	rollEvent.totalSuccessCountNoBonus = (rollEvent.successCount + rollEvent.autoSuccesses) * rollEvent.multiplier;
+	rollEvent.onesCount = rollEvent.dice.filter(dice => dice.faceValue == 1).length;
+	
+	//botch check
+	if (rollEvent.successCount == 0) {
+		handleBotch(rollEvent);
+	}
 	
 	var faceValueSum = 0;
 	rollEvent.dice.forEach(function(dice) {
@@ -183,13 +189,30 @@ function calculateTotals(rollEvent) {
 	rollEvent.faceValueSum = faceValueSum;
 }
 
+function handleBotch(rollEvent) {
+	var messageMap = new Map();
+	
+	messageMap.set(1, "BOTCH");
+	messageMap.set(2, "DOUBLE BOTCH");
+	messageMap.set(3, "TRIPLE BOTCH");
+	messageMap.set(4, "QUADRUPLE BOTCH");
+	messageMap.set(5, "QUINTUPLE BOTCH");
+	
+	rollEvent.botchMessage = messageMap.get(rollEvent.onesCount);
+}
+
 function printEvent(rollEvent) {
 	rollEvent.output = "`" + rollEvent.input + "`";
 	
 	if(rollEvent.comment) {
 		rollEvent.output += " " + rollEvent.comment;
 	}
-	rollEvent.output += " = (";
+	rollEvent.output += " = ";
+	
+	if(rollEvent.botchMessage) {
+		rollEvent.output += "**" + rollEvent.botchMessage + "!!!**";
+	}
+	rollEvent.output += " (";
 	
 	if(rollEvent.equalityOperator) {
 		printWithSuccesses(rollEvent);
@@ -198,8 +221,7 @@ function printEvent(rollEvent) {
 	}
 }
 
-function printWithSuccesses(rollEvent) {
-	
+function printWithSuccesses(rollEvent) {	
 	for (i = 0; i < rollEvent.dice.length; i++) {
 		
 		if(rollEvent.dice[i].success) {
