@@ -4,7 +4,7 @@ var Service = require('node-windows').Service;
 var svc = new Service({
   name:'LessShittyRoller',
   description: 'Roller bot for Exalted Discord',
-  script: 'D:\\Exalted Roller\\bot.js',
+  script: 'C:\\Users\\Jeff\\workspace\\LessShittyRoller\\bot.js',
   nodeOptions: [
     '--harmony',
     '--max_old_space_size=4096'
