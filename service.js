@@ -3,7 +3,7 @@ var Service = require('node-windows').Service;
 // Create a new service object
 var svc = new Service({
   name:'LessShittyRoller',
-  description: 'Roller bot for Discord',
+  description: 'Roller bot for Discord tabletop games',
   script: 'C:\\LessShittyRoller\\bot.js',
   nodeOptions: [
     '--harmony',
