@@ -2,10 +2,11 @@
   "name": "ExaltedRoller",
   "version": "1.0.0",
   "description": "Less Shitty Exalted Roller",
-  "main": "bot.js",
+  "main": "index.js",
   "author": "Jeffrey Meulenberg",
   "dependencies": {
     "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+    "discord.js": "^14.14.1",
     "node-windows": "^0.1.14",
     "winston": "^3.2.1"
   }
