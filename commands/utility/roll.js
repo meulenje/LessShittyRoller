@@ -5,12 +5,13 @@ module.exports = {
 		.setName('r')
 		.addStringOption(option =>
 			option
-				.setName('arguments')
-				.setDescription('Arguments to the roller'))
+				.setName('command')
+				.setRequired(true)
+				.setDescription('Roller command'))
 		.setDescription('Rolls dice pour vous'),
 	async execute(interaction) {
-		const arguments = interaction.options.getString('arguments');
-		await interaction.reply(handle(arguments));
+		const command = interaction.options.getString('command');
+		await interaction.reply(handle(command));
 	},
 };
 
